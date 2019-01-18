@@ -1,12 +1,15 @@
-REPO ?= registry.eu-de.bluemix.net/daivb_log/
+REPO ?= svlady/alpine-curl
 NAME = $(REPO)curl
-v ?= 7.61.1-alpine
+v ?= latest
 
 release: build
 	$(call RELEASE,$(v))
 
 build:
 	$(call BUILD,$(v))
+
+shell:
+	docker run --entrypoint /bin/sh -it $(NAME)
 
 run: build
 	docker run -it $(NAME)
@@ -23,5 +26,3 @@ define RELEASE
 	docker push $(NAME):$(1)
 endef
 
-bash:
-	docker run --entrypoint /bin/bash -it $(NAME)
