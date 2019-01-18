@@ -1,8 +1,8 @@
-# docker-curl
-Alpine-based image with just curl
+# alpine-curl
+Alpine-based image with just curl installed
 
 ## Usage
 
 ```console
-$ docker run --rm curl -fsSL https://www.google.com/
+$ docker run --rm svlady/alpine-curl -fsSL https://www.google.com
 ```
