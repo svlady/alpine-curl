@@ -1,28 +1,17 @@
-REPO ?= svlady/alpine-curl
-NAME = $(REPO)curl
-v ?= latest
-
-release: build
-	$(call RELEASE,$(v))
+REPO ?= svlady
+NAME = $(REPO)/alpine-curl
+PKG_VERSION  ?= 7.61.1-r1
+TAG = $(PKG_VERSION)
 
 build:
-	$(call BUILD,$(v))
+	docker build --build-arg PKG_VERSION=$(PKG_VERSION) -t $(NAME) .
+	docker tag $(NAME) $(NAME):$(TAG)
 
-shell:
-	docker run --entrypoint /bin/sh -it $(NAME)
+release: build
+	docker push $(NAME):$(TAG)
 
 run: build
-	docker run -it $(NAME)
+	docker run -it --rm --net=host $(NAME):$(TAG) --version
 
-define BUILD
-	docker build --build-arg VERSION=$(1) -t $(NAME) .
-	docker tag $(NAME) $(NAME):$(1)
-endef
-
-define RELEASE
-	$(call BUILD,$(1));
-	# git push
-	docker tag $(NAME) $(NAME):$(1)
-	docker push $(NAME):$(1)
-endef
-
+shell:
+	docker run -it --rm --net=host --entrypoint=/bin/sh $(NAME):$(TAG)
